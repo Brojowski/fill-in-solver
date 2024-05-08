@@ -1,7 +1,5 @@
 import java.io.File
 
-val EXAMPLE = "C:\\Users\\alex\\IdeaProjects\\fill-in-solver\\src\\example.txt"
-
 enum class Direction(val unit: Point) {
     Vertical(Point(0, 1)),
     Horizontal(Point(1, 0));
@@ -33,10 +31,10 @@ class FillIn(
     val words: List<String>
 )
 
-fun main() {
-    val lines = File(EXAMPLE).readLines()
+fun main(argv: Array<String>) {
+    val lines = File(argv[0]).readLines()
     val parser = FillInParser(lines)
-    parser.toFillIn()
+    print(parser.toFillIn().words)
 }
 
 class FillInParser(lines: List<String>) {
