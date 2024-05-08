@@ -1,0 +1,57 @@
+=============
+|     -     |
+|     -     |
+|     -     |
+|---   -    |
+|-     -    |
+|   -   -   |
+|    -     -|
+|USOC-   ---|
+|     -     |
+|     -     |
+|     -     |
+=============
+ABM
+ATA
+CRI
+EEN
+HOD
+IBM
+LES
+OCD
+ODA
+SRO
+SSS
+STA
+YET
+MISS
+ONTO
+STDS
+USOC
+AMAHL
+APTTO
+BLEED
+BUENO
+CELLO
+CREME
+DINAR
+DOBBS
+EARLE
+ERIES
+MARNE
+NEATO
+OCEAN
+OCTET
+OLDER
+PLASM
+PUNTS
+SEATS
+TROYS
+LOUPES
+MUTTON
+NEROLI
+ODESSA
+CENSURE
+ESTONIA
+TENDSTO
+TERTIAN
