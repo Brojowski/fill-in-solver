@@ -1,10 +1,13 @@
+import FillInParser.Companion.BLANK
 import java.io.File
+import java.util.function.Function
+import kotlin.reflect.KFunction
 
 enum class Direction(val unit: Point) {
     Vertical(Point(0, 1)),
     Horizontal(Point(1, 0));
 
-    fun component(p: Point): Int = when(this) {
+    fun component(p: Point): Int = when (this) {
         Vertical -> p.y
         Horizontal -> p.x
     }
@@ -29,12 +32,75 @@ class FillIn(
     val board: Array<Array<Char>>,
     val items: List<Item>,
     val words: List<String>
-)
+) {
+    val usedWords = mutableSetOf<String>()
+
+    init {
+        for (item in items) {
+            val content = values(item)
+            if (content.all { it != BLANK })
+                usedWords.add(content)
+        }
+    }
+
+    fun values(item: Item) = item.cells.map { p -> board[p.y][p.x] }.joinToString("")
+
+    fun matchingWords(item: Item) = (words - usedWords)
+        .filter { w ->
+            w.length == item.length
+                    && w.zip(values(item)).all { p ->
+                p.second == BLANK || p.first == p.second
+            }
+        }
+
+    fun solve(item: Item, word: String) {
+        usedWords.add(word)
+        item.cells.forEachIndexed { i, p -> board[p.y][p.x] = word[i] }
+    }
+
+    private fun onlyOptionSolver(item: Item): Item? {
+        if (matchingWords(item).size == 1) {
+            return item
+        }
+        return null
+    }
+
+    private fun failSolver(item: Item): Item? {
+        throw NotImplementedError()
+    }
+
+    val solvers = listOf<(Item) -> Item?>(
+        this::onlyOptionSolver,
+        this::failSolver
+        )
+
+    fun chooseSolveNextCell() {
+        for (canSolve in solvers) {
+            for (item in items) {
+                val solved = canSolve(item)
+                if (solved != null) {
+                    solve(item, matchingWords(item)[0])
+                    return
+                }
+            }
+        }
+
+    }
+
+    override fun toString(): String = board.map { it.joinToString("") }.joinToString("\n")
+}
 
 fun main(argv: Array<String>) {
     val lines = File(argv[0]).readLines()
     val parser = FillInParser(lines)
-    print(parser.toFillIn().words)
+    val fillin = parser.toFillIn()
+
+    while (fillin.usedWords.size != fillin.words.size) {
+        fillin.chooseSolveNextCell()
+        println(fillin)
+        println()
+    }
+
 }
 
 class FillInParser(lines: List<String>) {
